@@ -3,9 +3,6 @@ from telebot.types import Message, CallbackQuery
 from states.contact_information import UserInfoState
 from keyboards.inline import inline_locations
 
-# TODO: тут после выполнения нажатия кнопки выводится
-#  bot.send_message(message.from_user.id, 'Давай начнем с города,\nВ каком городе ищем?')
-#  хотя он должен идти дальше по сценарию
 @bot.message_handler(commands=['low', 'high', 'custom'])
 def low_high_custom(message: Message) -> None:
     """ Спрашивает у пользователя город в котором будем искать """
@@ -56,7 +53,6 @@ def quantity_hotels(message: Message) -> None:
             with bot.retrieve_data(message.chat.id) as data:
                 data['numbers_hotels'] = message.text
             bot.set_state(message.from_user.id, UserInfoState.price_min, message.chat.id)
-            bot.send_message(message.chat.id, "Отлично, запомнил!")
             bot.send_message(message.chat.id, "Отлично, запомнил!\nТеперь напишите минимальную стоимость в $")
         else:
             bot.send_message(message.chat.id, 'Ошибка!\nЧисло должно быть не более 25.\nВведите еще раз:')
@@ -72,7 +68,10 @@ def quantity_hotels(message: Message) -> None:
         with bot.retrieve_data(message.chat.id) as data:
             data['price_min'] = message.text
         bot.set_state(message.from_user.id, UserInfoState.price_max, message.chat.id)
-        bot.send_message(message.chat.id, "Отлично, запомнил!\nТеперь напишите минимальную стоимость в $")
+        bot.send_message(message.chat.id, "Отлично, запомнил!\nТеперь напишите максимальную стоимость в $")
+    else:
+        bot.send_message(message.chat.id, "Ошибка!\nЧисло должно содержать только цифры.\nВведите еще раз:")
+
 
 @bot.message_handler(state=UserInfoState.price_max)
 def quantity_hotels(message: Message) -> None:
@@ -87,7 +86,7 @@ def quantity_hotels(message: Message) -> None:
             if int(data['price_min']) < int(message.text):
                 data['price_max'] = message.text
                 bot.set_state(message.from_user.id, UserInfoState.price_min, message.chat.id)
-                bot.send_message(message.chat.id, "Отлично, запомнил!\nТеперь напишите минимальную стоимость в $")
+                bot.send_message(message.chat.id, "Хорошо")
             else:
                 bot.send_message(message.chat.id, "Максимальная сумма должна быть больше, чем минимальная сумма\nВведите еще раз:")
     else:
