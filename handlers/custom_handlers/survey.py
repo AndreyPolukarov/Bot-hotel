@@ -2,14 +2,20 @@ from loader import bot
 from telebot.types import Message
 from states.contact_information import UserInfoState
 from keyboards.inline import inline_locations
-from keyboards.inline import photo_buttons
 from loguru import logger
+
+# TODO: Тут не очень понимаю как переключить command == "/custom", что бы если команда введена /custom,
+#  то дополнительно должны заданы вопросы про дистанцию до центра (landmark_in, landmark_out)
+
 
 @bot.message_handler(commands=['low', 'high', 'custom'])
 def low_high_custom(message: Message) -> None:
     """ Спрашивает у пользователя город в котором будем искать """
 
+    bot.set_state(message.chat.id, UserInfoState.command)
     logger.info('Запоминаем выбранную команду: ' + message.text)
+    with bot.retrieve_data(message.chat.id) as data:
+        data["command"] = message.text
     bot.set_state(message.from_user.id, UserInfoState.city, message.chat.id)
     bot.send_message(message.from_user.id, 'Давай начнем с города,\nВ каком городе ищем?')
 
@@ -74,39 +80,30 @@ def price_max(message: Message) -> None:
         with bot.retrieve_data(message.chat.id) as data:
             if int(data['price_min']) < int(message.text):
                 data['price_max'] = message.text
-                photo_buttons.choice_photo_buttons(message)
             else:
                 bot.send_message(message.chat.id, "Максимальная сумма должна быть больше, чем минимальная сумма\nВведите еще раз:")
     else:
         bot.send_message(message.chat.id, 'Ошибка!\nЧисло должно содержать только цифры.\nВведите еще раз:')
 
-@bot.message_handler(state=UserInfoState.photo_count)
-def photo_count(message: Message) -> None:
-    """ Выводим кнопку "да" или "нет", спрашиваем сколько нужно фотографий, если нет то без них """
-
-    if message.text.isdigit():
-        logger.info('Ввод и запись количества фотографий: ' + message.text)
-        if 0 < int(message.text) <= 10:
-            with bot.retrieve_data(message.chat.id) as data:
-                data['photo_count'] = message.text
-        else:
-            bot.send_message(message.chat.id, 'Число фотографий должно быть в диапазоне от 1 до 10! Повторите ввод!')
-    else:
-        bot.send_message(message.chat.id, 'Ошибка! Вы ввели не число! Повторите ввод!')
 
 
 
-@bot.message_handler(commands=['help'])
-def help(message: Message) -> None:
-    """ Команды при вызове /help """
-    bot.send_message(message.from_user.id, "/low - Самые дешевые отели")
-    bot.send_message(message.from_user.id, "/high - Самые дорогие отели")
-    bot.send_message(message.from_user.id, "/custom - Лучшие по цене и расположению")
-    bot.send_message(message.from_user.id, "/history - Истории поиска")
 
-    #  привет ->
-    # bot.send_message(message.chat.id, "Привет, {0.first_name}!\nЯ бот  - {1.first_name}, "
-    #                                   "помогу тебе выбрать подходящий отель!".format(message.from_user, bot.get_me()))
+
+# if command == "/custom":
+# def check_command(command: str) -> str:
+#     @bot.message_handler(states=UserInfoState.landmark_in)
+#     def info_landmark_in(message: Message) -> None:
+#         logger.info('Начальный диапазон' + message.text)
+#         bot.send_message(message.chat.id, 'Напишите начало диапазона расстояния от центра')
+#         bot.set_state(message.from_user.id, UserInfoState.landmark_out, message.chat.id)
+#
+#     @bot.message_handler(states=UserInfoState.landmark_out)
+#     def info_landmark_out(message: Message) -> None:
+#         logger.info('Конечный диапазон' + message.text)
+#         bot.send_message(message.chat.id, 'Напишите конец диапазона расстояния от центра')
+
+
 
 
 

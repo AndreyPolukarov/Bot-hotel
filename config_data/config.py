@@ -1,6 +1,5 @@
 import os
 from dotenv import load_dotenv, find_dotenv
-import telebot
 
 
 if not find_dotenv():

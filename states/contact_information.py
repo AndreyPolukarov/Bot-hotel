@@ -10,8 +10,8 @@ class UserInfoState(StatesGroup):
     price_max = State()  # максимальная стоимость отеля
     photo_count = State()  # количество фотографий
     input_date = State()  # ввод даты (заезда, выезда)
-    landmarkIn = State()  # начало диапазона расстояния от центра
-    landmarkOut = State()  # конец диапазона расстояния от центра
+    landmark_in = State()  # начало диапазона расстояния от центра
+    landmark_out = State()  # конец диапазона расстояния от центра
     history_select = State()  # выбор истории поиска
 
 

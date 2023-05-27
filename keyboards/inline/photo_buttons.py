@@ -1,7 +1,7 @@
 from loader import bot
 from telebot import types
 from telebot.types import Message
-
+from loguru import logger
 
 def choice_photo_buttons(message: Message) -> None:
     """
@@ -9,7 +9,7 @@ def choice_photo_buttons(message: Message) -> None:
     : param message : Message
     : return : None
     """
-    # logger.info('Вывод кнопок о необходимости фотографий пользователю. ')
+    logger.info('Вывод кнопок о необходимости фотографий пользователю. ')
     markup_yes_no = types.InlineKeyboardMarkup()
     markup_yes_no.add(types.InlineKeyboardButton(text='ДА', callback_data='yes'))
     markup_yes_no.add(types.InlineKeyboardButton(text='НЕТ', callback_data='no'))
