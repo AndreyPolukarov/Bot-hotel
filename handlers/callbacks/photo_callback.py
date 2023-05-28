@@ -2,6 +2,8 @@ from loader import bot
 from telebot.types import CallbackQuery
 from states.contact_information import UserInfoState
 from loguru import logger
+from handlers.custom_handlers import survey
+
 
 @bot.callback_query_handler(func=lambda call: call.data.isalpha())
 def photo_callback(call: CallbackQuery) -> None:
@@ -21,5 +23,6 @@ def photo_callback(call: CallbackQuery) -> None:
             data['photo_need'] = call.data
             data['photo_count'] = '0'
         bot.delete_message(call.message.chat.id, call.message.message_id)
+        survey.my_calendar(call.message, 'заезда')
 
 

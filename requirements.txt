@@ -3,3 +3,4 @@ python-dotenv==0.21.1
 pydantic==1.10.7
 python-dotenv==0.21.1
 loguru==0.7.0
+peewee==3.16.0

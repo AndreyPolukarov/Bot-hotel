@@ -1,1 +1,1 @@
-from . import models, core
+from . import models

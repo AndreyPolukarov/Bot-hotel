@@ -1,18 +1,37 @@
-import peewee as pw
+from peewee import *
 from datetime import datetime
 
-db = pw.SqliteDatabase("database_hotel.db")
-class BaseModel(pw.Model):
-    created_at = pw.DateField(default=datetime.now())
+# TODO: пока не очень понимаю как добавлять в таблицу информацию(User( инфа ).save) не добавляются
+
+db = SqliteDatabase("info_hotel.db")
+
+# Создали класс, чтобы наследовать от него все таблицы базы данных
+class BaseModel(Model):
     class Meta:
         database = db
-class User(BaseModel):
-    name = pw.CharField()
-    telegram_id = pw.IntegerField()
+
+class InfoHotel(BaseModel):
+    # В классе описываем таблицу в базе данных
+    class Meta:
+        db_table = 'Hotels'
+    command = CharField()
+    hotel_id = IntegerField()
+    hotel_name = CharField()
+    address = CharField()
+    distance = IntegerField()
+    price = IntegerField()
+
+
 
 class History(BaseModel):
-    numver = pw.TextField()
-    message = pw.TextField()
+    # В классе описываем таблицу в базе данных
+    class Meta:
+        db_table = 'History'
+    history = ForeignKeyField(InfoHotel)
+
+
+
+db.create_tables([InfoHotel, History])
 
 
 
