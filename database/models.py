@@ -1,41 +1,55 @@
 from peewee import *
-from datetime import datetime
+import pathlib
 
-# TODO: пока не очень понимаю как добавлять в таблицу информацию(User( инфа ).save) не добавляются
+db_name = pathlib.Path(__file__).parent
+db = SqliteDatabase(db_name / "database.db")
 
-db = SqliteDatabase("info_hotel.db")
 
 # Создали класс, чтобы наследовать от него все таблицы базы данных
 class BaseModel(Model):
     class Meta:
         database = db
+    id = AutoField()
 
-class InfoHotel(BaseModel):
+
+class UserCommand(BaseModel):
     # В классе описываем таблицу в базе данных
     class Meta:
-        db_table = 'Hotels'
+        db_table = 'Command'
+
     command = CharField()
+    city = CharField()
     hotel_id = IntegerField()
+    numbers_hotels = CharField()
+    price_min = IntegerField()
+    price_max = IntegerField()
+    photo_need = CharField()
+    photo_count = IntegerField()
+    distance_min = IntegerField()
+    distance_max = IntegerField()
+
+
+class InfoHotels(BaseModel):
+    class Meta:
+        db_table = 'Hotels'
+
     hotel_name = CharField()
     address = CharField()
     distance = IntegerField()
-    price = IntegerField()
-
+    prices = IntegerField()
 
 
 class History(BaseModel):
-    # В классе описываем таблицу в базе данных
     class Meta:
         db_table = 'History'
-    history = ForeignKeyField(InfoHotel)
+
+    history_id = ForeignKeyField(UserCommand, field='id')
 
 
+if __name__ == "__main__":
+    db.create_tables([UserCommand, InfoHotels, History])
 
-db.create_tables([InfoHotel, History])
-
-
-
-#Подсказка:
+# Подсказка:
 # Для того чтобы создать таблицы, можно просто обратится к классу
 # User.create_table()
 # Метод "create" сразу сохраняет изменение в базе данных

@@ -29,11 +29,7 @@ def get_city(message: Message) -> None:
     bot.send_message(message.from_user.id, 'Выполняю поиск в городе:  {}'.format(data['city']))
     if ''.join(message.text.split()).isalpha():
         if any(i_elems.isspace() for i_elems in message.text):
-            if message.text.lower() == 'new york':
-                bot.send_message(message.from_user.id, 'Уточните местоположение:',
-                                 reply_markup=inline_locations.city_markup(message.text))
-            else:
-                bot.send_message(message.from_user.id, 'В данный момент доступен только New York')
+            bot.send_message(message.from_user.id, 'Уточните местоположение:', reply_markup=inline_locations.city_markup(message.text))
         else:
             bot.send_message(message.from_user.id, 'Город нужно написать с пробелом')
     else:
