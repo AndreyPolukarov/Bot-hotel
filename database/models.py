@@ -9,15 +9,22 @@ db = SqliteDatabase(db_name / "database.db")
 class BaseModel(Model):
     class Meta:
         database = db
-    id = AutoField()
 
 
-class UserCommand(BaseModel):
+class Command(BaseModel):
     # В классе описываем таблицу в базе данных
     class Meta:
         db_table = 'Command'
 
     command = CharField()
+
+class UserCommand(BaseModel):
+    # В классе описываем таблицу в базе данных
+    class Meta:
+        db_table = 'UserCommand'
+
+    num_requests = ForeignKeyField(Command, field='id')
+    time = DateTimeField(formats='%Y-%m-%d %H:%M:%S')
     city = CharField()
     hotel_id = IntegerField()
     numbers_hotels = CharField()
@@ -33,21 +40,15 @@ class InfoHotels(BaseModel):
     class Meta:
         db_table = 'Hotels'
 
+    command_id = ForeignKeyField(Command, field='id')
     hotel_name = CharField()
     address = CharField()
     distance = IntegerField()
     prices = IntegerField()
 
 
-class History(BaseModel):
-    class Meta:
-        db_table = 'History'
-
-    history_id = ForeignKeyField(UserCommand, field='id')
-
-
 if __name__ == "__main__":
-    db.create_tables([UserCommand, InfoHotels, History])
+    db.create_tables([Command, UserCommand, InfoHotels])
 
 # Подсказка:
 # Для того чтобы создать таблицы, можно просто обратится к классу

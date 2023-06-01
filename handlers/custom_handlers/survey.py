@@ -28,10 +28,7 @@ def get_city(message: Message) -> None:
         logger.info('Пользователь ввел город: ' + message.text)
     bot.send_message(message.from_user.id, 'Выполняю поиск в городе:  {}'.format(data['city']))
     if ''.join(message.text.split()).isalpha():
-        if any(i_elems.isspace() for i_elems in message.text):
-            bot.send_message(message.from_user.id, 'Уточните местоположение:', reply_markup=inline_locations.city_markup(message.text))
-        else:
-            bot.send_message(message.from_user.id, 'Город нужно написать с пробелом')
+        bot.send_message(message.from_user.id, 'Уточните местоположение:', reply_markup=inline_locations.city_markup(message.text))
     else:
         bot.send_message(message.from_user.id, 'Город может содержать только буквы')
 

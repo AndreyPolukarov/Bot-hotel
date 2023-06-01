@@ -29,7 +29,7 @@ def full_info(message: Message, hotels_info: Dict, photo_count: int, numbers_hot
 							   f"Цены: {hotel['price']} $\n"
 
 			with db:
-				InfoHotels.create(
+				InfoHotels.create(command_id=Command.select(Command.id).order_by(Command.id.desc()).get(),
 					hotel_name=hotel['name'],
 					address=response['data']['propertyInfo']['summary']['location']['address']['addressLine'],
 					distance=hotel['distance'],
@@ -46,7 +46,7 @@ def full_info(message: Message, hotels_info: Dict, photo_count: int, numbers_hot
 						if random_numbers == number:
 							medias.append(InputMediaPhoto(media=imag, caption=full_hotels_info))
 				bot.send_media_group(message.chat.id, medias)
-				bot.send_message(message.chat.id, full_hotels_info)
+				# bot.send_message(message.chat.id, full_hotels_info)
 			else:
 				bot.send_message(message.chat.id, full_hotels_info)
 
