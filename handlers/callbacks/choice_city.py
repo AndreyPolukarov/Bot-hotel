@@ -3,6 +3,7 @@ from telebot.types import CallbackQuery
 from states.contact_information import UserInfoState
 from loguru import logger
 
+
 @bot.callback_query_handler(func=lambda call: call.data.isdigit())
 def destination_id_callback(call: CallbackQuery) -> None:
     """

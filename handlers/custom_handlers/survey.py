@@ -6,6 +6,7 @@ from loguru import logger
 from post_and_get import proprties_v2_list
 from keyboards.calendar.bot_calendar import Calendar
 
+
 @bot.message_handler(commands=['low', 'high', 'custom'])
 def low_high_custom(message: Message) -> None:
     """ Спрашивает у пользователя город в котором будем искать """
@@ -58,15 +59,12 @@ def price_min(message: Message) -> None:
     """ Ввод минимальной стоимости отеля и проверка чтобы это было число. """
 
     if message.text.isdigit():
-        if int(message.text) <= 100:
-            logger.info('Ввод и запись максимальной стоимости отеля, сравнение с price_min: ' + message.text)
-            with bot.retrieve_data(message.chat.id) as data:
-                data['price_min'] = message.text
-            bot.set_state(message.from_user.id, UserInfoState.price_max, message.chat.id)
-            bot.send_message(message.chat.id,
-                             "Отлично, запомнил!\nТеперь напишите максимальную стоимость в $")
-        else:
-            bot.send_message(message.chat.id, "Ошибка!\nМинимальная сумма от 100$\nВведите еще раз:")
+        logger.info('Ввод и запись максимальной стоимости отеля, сравнение с price_min: ' + message.text)
+        with bot.retrieve_data(message.chat.id) as data:
+            data['price_min'] = message.text
+        bot.set_state(message.from_user.id, UserInfoState.price_max, message.chat.id)
+        bot.send_message(message.chat.id,
+                         "Отлично, запомнил!\nТеперь напишите максимальную стоимость в $")
     else:
         bot.send_message(message.chat.id, "Ошибка!\nЧисло должно содержать только цифры.\nВведите еще раз:")
 
@@ -90,6 +88,7 @@ def price_max(message: Message) -> None:
     else:
         bot.send_message(message.chat.id, 'Ошибка!\nЧисло должно содержать только цифры.\nВведите еще раз:')
 
+
 @bot.message_handler(state=UserInfoState.photo_count)
 def input_photo_quantity(message: Message) -> None:
     """ Ввод количества фотографий и проверка на число и на соответствие заданному диапазону от 1 до 10 """
@@ -104,6 +103,8 @@ def input_photo_quantity(message: Message) -> None:
             bot.send_message(message.chat.id, 'Число фотографий должно быть в диапазоне от 1 до 10! Повторите ввод!')
     else:
         bot.send_message(message.chat.id, 'Ошибка! Вы ввели не число! Повторите ввод!')
+
+
 @bot.message_handler(state=UserInfoState.landmark_in)
 def input_landmark_in(message: Message) -> None:
     """ Ввод начала диапазона расстояния до центра """
@@ -128,6 +129,7 @@ def input_landmark_out(message: Message) -> None:
     else:
         bot.send_message(message.chat.id, 'Ошибка! Вы ввели не число! Повторите ввод!')
 
+
 def check_command(command: str):
     """ Проверка команды и назначение параметра сортировки """
 
@@ -138,6 +140,7 @@ def check_command(command: str):
 
 
 bot_calendar = Calendar()
+
 
 def my_calendar(message: Message, word: str) -> None:
     """ Запуск инлайн-клавиатуры (календаря) для выбора дат заезда и выезда """

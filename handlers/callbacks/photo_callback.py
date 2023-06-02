@@ -7,7 +7,6 @@ from handlers.custom_handlers import survey
 
 @bot.callback_query_handler(func=lambda call: call.data.isalpha())
 def photo_callback(call: CallbackQuery) -> None:
-
     """ Пользователь нажал кнопку "ДА" или "НЕТ" """
 
     if call.data == 'yes':

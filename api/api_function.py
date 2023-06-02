@@ -5,6 +5,8 @@ load_dotenv()
 
 
 def api_request(method_endswith, params, method_type):
+    """ Запрашиваем post и get запрос  """
+
     url = f"https://hotels4.p.rapidapi.com/{method_endswith}"
 
     if method_type == 'GET':

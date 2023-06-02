@@ -7,8 +7,6 @@ from handlers.custom_handlers import survey
 from telebot.types import CallbackQuery
 from post_and_get import proprties_v2_list
 
-
-
 calendar = Calendar()
 calendar_callback = CallbackData("calendar", "action", "year", "month", "day")
 
@@ -40,7 +38,6 @@ def input_date(call: CallbackQuery) -> None:
                 if int(select_date) > checkin:
                     logger.info('Ввод и сохранение даты выезда.')
                     data['checkOutDate'] = {'day': day, 'month': month, 'year': year}
-                    # далее две переменные-заглушки, чтобы не было ошибки при получении словаря с отелями
                     data['landmark_in'] = 0
                     data['landmark_out'] = 0
                     if data['sort'] == 'DISTANCE':

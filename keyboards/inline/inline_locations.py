@@ -12,11 +12,11 @@ def city_founding(city):
 			cities.append({city_name: destination})
 	return cities
 
+
 def city_markup(city):
-    cities = city_founding(city)
-    destinations = types.InlineKeyboardMarkup()
-    for city in cities:
-        for key, value in city.items():
-            destinations.add(types.InlineKeyboardButton(text=key,
-                          callback_data=value))
-    return destinations
+	cities = city_founding(city)
+	destinations = types.InlineKeyboardMarkup()
+	for city in cities:
+		for key, value in city.items():
+			destinations.add(types.InlineKeyboardButton(text=key, callback_data=value))
+	return destinations

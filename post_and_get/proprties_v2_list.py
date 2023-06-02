@@ -2,8 +2,9 @@ from api import api_function
 from telebot.types import Message, Dict
 from post_and_get import full_info_hotel
 from loguru import logger
-from database.models import *
+from database.models import Command, UserCommand, db
 import datetime
+
 def info_post_list(message: Message, data: Dict) -> Dict:
 	logger.info('Переходим в properties/v2/list')
 	logger.info(data)
@@ -32,14 +33,14 @@ def info_post_list(message: Message, data: Dict) -> Dict:
 		"siteId": 300000001,
 		"destination": {"regionId": data['destination_id']},
 		"checkInDate": {
-			"day": 10,
-			"month": 10,
-			"year": 2022
+			'day': int(data['checkInDate']['day']),
+			'month': int(data['checkInDate']['month']),
+			'year': int(data['checkInDate']['year'])
 		},
 		"checkOutDate": {
-			"day": 15,
-			"month": 10,
-			"year": 2022
+			'day': int(data['checkOutDate']['day']),
+			'month': int(data['checkOutDate']['month']),
+			'year': int(data['checkOutDate']['year'])
 		},
 		"rooms": [
 			{
@@ -48,26 +49,36 @@ def info_post_list(message: Message, data: Dict) -> Dict:
 			}
 		],
 		"resultsStartingIndex": 0,
-		"resultsSize": 200,
-		"sort": "PRICE_LOW_TO_HIGH",
+		"resultsSize": 30,
+		"sort": data['sort'],
 		"filters": {"price": {
-			"max": data["price_max"],
-			"min": data["price_min"]
+			"max": int(data['price_max']),
+			"min": int(data['price_min'])
 		}}
 	}
 
 	response = api_function.api_request('properties/v2/list', payload, 'POST')
+	if not response:
+		raise LookupError('Запрос пуст...')
 
-	if data['command'] == '/low' or data['command'] == '/high':
-		logger.info('переходим в /low и ищем подходящие отели')
-		hotels_info = {}
-		for hotel in response['data']['propertySearch']['properties']:
-			if float(data['price_min']) <= hotel['price']['lead']['amount'] <= float(data["price_max"]):
-				hotels_info[hotel['id']] = {
-					'name': hotel['name'], 'id': hotel['id'],
-					'distance': hotel['destinationInfo']['distanceFromDestination']['value'],
-					"price": hotel['price']['lead']['amount']
-				}
+	if 'errors' in response.keys():
+		return {'error': response['errors'][0]['message']}
+
+	hotels_info = {}
+	for hotel in response['data']['propertySearch']['properties']:
+		if float(data['price_min']) <= hotel['price']['lead']['amount'] <= float(data["price_max"]):
+			hotels_info[hotel['id']] = {
+				'name': hotel['name'], 'id': hotel['id'],
+				'distance': hotel['destinationInfo']['distanceFromDestination']['value'],
+				"price": hotel['price']['lead']['amount']
+			}
+
+	if data['command'] == '/high':
+		logger.info('Переходит в /high')
+		hotels_info = {
+			key: value for key, value in
+			sorted(hotels_info.items(), key=lambda hotel_id: hotel_id[1]['price'], reverse=True)
+		}
 
 	elif data['command'] == '/custom':
 		logger.info('переходит /custom функцию и ищет отели')

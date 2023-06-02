@@ -2,7 +2,6 @@ import datetime
 import calendar
 import typing
 from dataclasses import dataclass
-
 from telebot import TeleBot
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 
@@ -121,13 +120,7 @@ class Calendar:
     def create_months_calendar(
         self, name: str = "calendar", year: int = None
     ) -> InlineKeyboardMarkup:
-        """
-        Создает календарь с выбором месяца
-
-        :param name:
-        :param year:
-        :return:
-        """
+        """ Создает календарь с выбором месяца """
 
         if year is None:
             year = datetime.datetime.now().year
@@ -167,16 +160,6 @@ class Calendar:
         """
         Метод создает новый календарь, если нажата кнопка "вперед" или "назад"
         Этот метод должен быть вызван внутри CallbackQueryHandler.
-
-
-        :param bot: The object of the bot CallbackQueryHandler
-        :param call: CallbackQueryHandler data
-        :param day:
-        :param month:
-        :param year:
-        :param action:
-        :param name:
-        :return: Returns a tuple
         """
 
         current = datetime.datetime(int(year), int(month), 1)
@@ -263,10 +246,6 @@ class CallbackData:
     def new(self, *args, **kwargs) -> str:
         """
         Generate callback data
-
-        :param args:
-        :param kwargs:
-        :return:
         """
 
         args = list(args)
@@ -305,9 +284,6 @@ class CallbackData:
     def parse(self, callback_data: str) -> typing.Dict[str, str]:
         """
         Анализ данных из callback data
-
-        :param callback_data:
-        :return:
         """
 
         prefix, *parts = callback_data.split(self.sep)
@@ -325,9 +301,6 @@ class CallbackData:
     def filter(self, **config):
         """
         Создать фильтр
-
-        :param config:
-        :return:
         """
 
         print(config, self._part_names)

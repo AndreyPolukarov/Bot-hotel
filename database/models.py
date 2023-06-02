@@ -4,22 +4,33 @@ import pathlib
 db_name = pathlib.Path(__file__).parent
 db = SqliteDatabase(db_name / "database.db")
 
-
-# Создали класс, чтобы наследовать от него все таблицы базы данных
 class BaseModel(Model):
+    """ Создали класс, чтобы наследовать от него все таблицы базы данных """
     class Meta:
         database = db
 
 
 class Command(BaseModel):
-    # В классе описываем таблицу в базе данных
+    """ В классе описываем таблицу в базе данных """
     class Meta:
         db_table = 'Command'
 
     command = CharField()
 
+class InfoHotels(BaseModel):
+    """ В классе описываем таблицу в базе данных """
+    class Meta:
+        db_table = 'Hotels'
+
+    command_id = ForeignKeyField(Command, field='id')
+    hotel_name = CharField()
+    address = CharField()
+    distance = IntegerField()
+    prices = IntegerField()
+
 class UserCommand(BaseModel):
-    # В классе описываем таблицу в базе данных
+    """ В классе описываем таблицу в базе данных """
+
     class Meta:
         db_table = 'UserCommand'
 
@@ -36,19 +47,8 @@ class UserCommand(BaseModel):
     distance_max = IntegerField()
 
 
-class InfoHotels(BaseModel):
-    class Meta:
-        db_table = 'Hotels'
-
-    command_id = ForeignKeyField(Command, field='id')
-    hotel_name = CharField()
-    address = CharField()
-    distance = IntegerField()
-    prices = IntegerField()
-
-
 if __name__ == "__main__":
-    db.create_tables([Command, UserCommand, InfoHotels])
+    db.create_tables([Command, InfoHotels, UserCommand])
 
 # Подсказка:
 # Для того чтобы создать таблицы, можно просто обратится к классу
