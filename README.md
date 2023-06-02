@@ -78,10 +78,10 @@
 
 <h3>В разработке использованы</h3>
 <ul>
-   <li>pyTelegramBotAPI==4.9.0<li>
-   <li>pydantic==1.10.7<li>
-   <li>python-dotenv==0.21.1<li>
-   <li>loguru==0.7.0<li>
-   <li>peewee==3.16.0<li>
+   <li>pyTelegramBotAPI==4.9.0</li>
+   <li>pydantic==1.10.7</li>
+   <li>python-dotenv==0.21.1</li>
+   <li>loguru==0.7.0</li>
+   <li>peewee==3.16.0</li>
 </ul>
 
