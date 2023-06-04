@@ -6,8 +6,16 @@ from database.models import Command, UserCommand, db
 import datetime
 
 def info_post_list(message: Message, data: Dict) -> Dict:
+	"""
+	Получаем все данные и сохраняем в bd файл информацию, которую вводил пользователь,
+	происходит поиск по post запросу, создается словарь с нужной информацией по отелю,
+	так же проверяем какую команду вводил пользователь.
+	: param message : Message.
+	: param data : Dict данные, собранные от пользователя.
+	: return : Dict данные, с нужной информацией по отелю
+	"""
+
 	logger.info('Переходим в properties/v2/list')
-	logger.info(data)
 
 	with db:
 		Command.create(command=data['command'])

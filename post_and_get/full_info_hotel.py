@@ -6,7 +6,18 @@ from telebot.types import Message, Dict, InputMediaPhoto
 from database.models import InfoHotels, db, Command
 
 
-def full_info(message: Message, hotels_info: Dict, photo_count: int, numbers_hotels: int) -> Dict:
+def full_info(message: Message, hotels_info: Dict, photo_count: int, numbers_hotels: int):
+	"""
+	Получаем все данные с нужной информацией по отелю, сохраняем в bd файл с нужной информацией, происходит поиск по post запросу,
+	формируется информация по отелю в которую дальнейшем отправляем пользователю,
+	проверяем сколько фотографий нужно пользователю и отправляем пользователю,
+	если фотографий 0, то отправляем без фото, так же формируется рандомный список выбор фотографий,
+	: param message : Message.
+	: param hotels_info : Dict данные, с нужной информацией по отелю.
+	: photo_count: int : сколько фото запросил пользователь.
+	: numbers_hotels: int : сколько отелей выбрал пользователь.
+	"""
+
 	logger.info('переходим full_info')
 
 	count = 0

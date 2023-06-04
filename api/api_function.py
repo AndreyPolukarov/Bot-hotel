@@ -5,7 +5,10 @@ load_dotenv()
 
 
 def api_request(method_endswith, params, method_type):
-    """ Запрашиваем post и get запрос  """
+    """
+    Получаем данные, проверяет,
+    если get, то работает get_request(), если post, то post_request()
+    """
 
     url = f"https://hotels4.p.rapidapi.com/{method_endswith}"
 
@@ -22,6 +25,7 @@ def api_request(method_endswith, params, method_type):
         )
 
 def get_request(url, params):
+    """ Отправка запроса серверу на поиск отелей и достает всю нужную информацию """
     headers = {
         "X-RapidAPI-Key": os.getenv("RAPID_API_KEY", None),
         "X-RapidAPI-Host": os.getenv("HOST_API", None),
@@ -39,6 +43,7 @@ def get_request(url, params):
 
 
 def post_request(url, params):
+    """ Отправка запроса серверу на поиск отелей и достает всю нужную информацию """
     headers = {
         "content-type": "application/json",
         "X-RapidAPI-Key": os.getenv("RAPID_API_KEY", None),

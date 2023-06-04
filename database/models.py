@@ -18,7 +18,7 @@ class Command(BaseModel):
     command = CharField()
 
 class InfoHotels(BaseModel):
-    """ В классе описываем таблицу в базе данных """
+    """ В классе описываем таблицу в базе данных, с информацией об отелей """
     class Meta:
         db_table = 'Hotels'
 
@@ -29,8 +29,7 @@ class InfoHotels(BaseModel):
     prices = IntegerField()
 
 class UserCommand(BaseModel):
-    """ В классе описываем таблицу в базе данных """
-
+    """ В классе описываем таблицу в базе данных, с информацией которую введет пользователь"""
     class Meta:
         db_table = 'UserCommand'
 
