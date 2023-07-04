@@ -65,6 +65,7 @@ def full_info(message: Message, hotels_info: Dict, photo_count: int, numbers_hot
 				bot.send_message(message.chat.id, full_hotels_info)
 			else:
 				bot.send_message(message.chat.id, full_hotels_info)
+	bot.send_message(message.chat.id, f'По вашему запросу {count} отелей')
 	bot.send_message(message.chat.id, 'Поиск окончен!\nЕсли хотите выбрать другой отель то выберите команду\n/low\n/high\n/custom')
 	bot.set_state(message.chat.id, None)
 
